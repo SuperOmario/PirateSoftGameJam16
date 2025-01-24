@@ -1,0 +1,106 @@
+[gd_scene load_steps=9 format=3 uid="uid://cicxtn7ohak56"]
+
+[ext_resource type="Script" path="res://code/entities/enemy/enemy.gd" id="1_bhbim"]
+[ext_resource type="Texture2D" uid="uid://dbe4ybjkkx2cq" path="res://assets/art/icon.svg" id="1_jyyqr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wl471"]
+size = Vector3(1.29639, 1.2832, 0.001)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b4tii"]
+size = Vector3(1.34412, 0.419525, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wymmo"]
+radius = 0.620382
+height = 2.11164
+
+[sub_resource type="Animation" id="Animation_qgxye"]
+resource_name = "ClawAttack"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShapeClaw:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.221825, 0, 0.491665), Vector3(0.0916172, 0, 0.491665)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShapeClaw:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.5708, -0.737402, 0), Vector3(1.5708, 0.563497, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_eod5w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShapeClaw:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.221825, 0, 0.491665)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShapeClaw:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.5708, -0.737402, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w6foy"]
+_data = {
+"ClawAttack": SubResource("Animation_qgxye"),
+"RESET": SubResource("Animation_eod5w")
+}
+
+[node name="Enemy" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_bhbim")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_wl471")
+
+[node name="Sprite3D" type="Sprite3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
+modulate = Color(1, 0, 0, 1)
+billboard = 1
+texture = ExtResource("1_jyyqr")
+
+[node name="HurtBox" type="Area3D" parent="."]
+collision_layer = 2
+
+[node name="HurtBoxCollision" type="CollisionShape3D" parent="HurtBox"]
+shape = SubResource("BoxShape3D_b4tii")
+
+[node name="HitBox" type="Area3D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShapeClaw" type="CollisionShape3D" parent="HitBox"]
+transform = Transform3D(0.740218, -0.672367, 2.43396e-06, 0, -3.61999e-06, -1, 0.672367, 0.740218, -2.67958e-06, -0.221825, 0, 0.491665)
+shape = SubResource("CapsuleShape3D_wymmo")
+
+[node name="ClawAttack" type="AnimationPlayer" parent="HitBox"]
+libraries = {
+"": SubResource("AnimationLibrary_w6foy")
+}
