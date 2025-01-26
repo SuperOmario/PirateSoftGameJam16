@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cicxtn7ohak56"]
+[gd_scene load_steps=8 format=3 uid="uid://cicxtn7ohak56"]
 
 [ext_resource type="Script" path="res://code/entities/enemy/enemy.gd" id="1_bhbim"]
 [ext_resource type="Texture2D" uid="uid://dbe4ybjkkx2cq" path="res://assets/art/icon.svg" id="1_jyyqr"]
 [ext_resource type="PackedScene" uid="uid://ijw5edjyug2" path="res://code/misc/attack/attack.tscn" id="3_k1002"]
+[ext_resource type="PackedScene" uid="uid://ds41k140ci421" path="res://code/misc/health/health.tscn" id="4_0kifc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wl471"]
 size = Vector3(1.29639, 1.2832, 0.001)
@@ -13,7 +14,7 @@ size = Vector3(1.34412, 0.419525, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_b2t43"]
 radius = 2.45422
 
-[node name="Enemy" type="CharacterBody3D"]
+[node name="Enemy" type="CharacterBody3D" groups=["Enemy"]]
 collision_layer = 2
 script = ExtResource("1_bhbim")
 
@@ -33,9 +34,24 @@ collision_layer = 2
 shape = SubResource("BoxShape3D_b4tii")
 
 [node name="Attack" parent="." instance=ExtResource("3_k1002")]
+attacktimertime = 0.3
+attackcooldowntime = 0.2
+
+[node name="HitBox" parent="Attack" index="2"]
+collision_layer = 2
+collision_mask = 1
 
 [node name="AggroRadius" type="Area3D" parent="."]
 collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AggroRadius"]
 shape = SubResource("SphereShape3D_b2t43")
+
+[node name="Health" parent="." instance=ExtResource("4_0kifc")]
+health = 10
+max_health = 10
+
+[connection signal="damage" from="Attack" to="." method="_on_attack_damage"]
+[connection signal="died" from="Health" to="." method="_on_died"]
+
+[editable path="Attack"]

@@ -11,9 +11,14 @@ config_version=5
 [application]
 
 config/name="Witch's Familiar"
-run/main_scene="res://code/main.tscn"
+run/main_scene="res://code/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/art/icon.svg"
+
+[global_group]
+
+Enemy="Enemies"
+Player="Player"
 
 [input]
 

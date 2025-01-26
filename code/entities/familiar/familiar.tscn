@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://pn4k20bgommm"]
+[gd_scene load_steps=7 format=3 uid="uid://pn4k20bgommm"]
 
 [ext_resource type="Script" path="res://code/entities/familiar/familiar.gd" id="1_wwn48"]
 [ext_resource type="Texture2D" uid="uid://dbe4ybjkkx2cq" path="res://assets/art/icon.svg" id="2_flm26"]
 [ext_resource type="PackedScene" uid="uid://ijw5edjyug2" path="res://code/misc/attack/attack.tscn" id="3_ni8rk"]
+[ext_resource type="PackedScene" uid="uid://ds41k140ci421" path="res://code/misc/health/health.tscn" id="4_lf30i"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3jwuy"]
 size = Vector3(1.32031, 1.15736, 1.20752)
@@ -10,18 +11,20 @@ size = Vector3(1.32031, 1.15736, 1.20752)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1pf8f"]
 size = Vector3(1.34412, 0.419525, 1)
 
-[node name="Familiar" type="CharacterBody3D"]
+[node name="Familiar" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_wwn48")
 rollspeed = 150
 
-[node name="CollisionBox" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.357704, 0)
+[node name="Pivot" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_3jwuy")
 
-[node name="Sprite3D" type="Sprite3D" parent="CollisionBox"]
+[node name="Sprite3D" type="Sprite3D" parent="Pivot"]
 transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
 billboard = 1
 texture = ExtResource("2_flm26")
+
+[node name="Attack" parent="Pivot" instance=ExtResource("3_ni8rk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.357704, 0)
 
 [node name="HurtBox" type="Area3D" parent="."]
 collision_mask = 2
@@ -39,8 +42,11 @@ one_shot = true
 wait_time = 0.25
 one_shot = true
 
-[node name="Attack" parent="." instance=ExtResource("3_ni8rk")]
-enemy_group = "Enemy"
+[node name="Health" parent="." instance=ExtResource("4_lf30i")]
+health = 10
+max_health = 100
 
+[connection signal="damage" from="Pivot/Attack" to="." method="_on_attack_damage"]
 [connection signal="timeout" from="Roll/RollTimer" to="." method="_on_roll_timer_timeout"]
 [connection signal="timeout" from="Roll/RollCooldown" to="." method="_on_roll_cooldown_timeout"]
+[connection signal="died" from="Health" to="." method="_on_died"]

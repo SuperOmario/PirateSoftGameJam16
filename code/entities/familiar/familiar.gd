@@ -1,19 +1,21 @@
 extends CharacterBody3D
 
+class_name Familiar
+
 var input_dir : Vector2
 var direction : Vector3
 var last_direction := Vector3(0,0,1)
 var can_roll := true
 var is_rolling := false
 
-signal damage
-
 @export var speed := 14
 @export var rollspeed := 20
+@onready var pivot := $Pivot
 @onready var rolltimer := $Roll/RollTimer
 @onready var rollcooldown := $Roll/RollCooldown
 @onready var hurtbox := $HurtBox/HurtBoxCollision
-@onready var attack := $Attack
+@onready var attack := $Pivot/Attack
+@onready var health := $Health
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -24,6 +26,7 @@ func _physics_process(delta):
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	pivot.look_at(global_position - direction, Vector3.UP)
 	if Input.is_action_just_pressed("roll"):
 		roll()
 	elif direction and !is_rolling:
@@ -67,3 +70,12 @@ func _get_is_rolling() -> bool:
 
 func _set_is_rolling(value : bool) -> void:
 	is_rolling = value
+
+func _on_died():
+	print("GAME OVER")
+
+func _on_attack_damage(body : Node3D, damage : int):
+	print(body)
+	if body.is_in_group("Enemy"):
+		print(body)
+		body.health.take_damage(damage)

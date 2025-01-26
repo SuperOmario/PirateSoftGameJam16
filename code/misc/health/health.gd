@@ -7,7 +7,6 @@ signal damaged
 signal healed
 signal died
 
-
 func _ready() -> void:
 	_set_health(max_health)
 
@@ -18,8 +17,10 @@ func _get_health() -> int:
 	return health
 
 func take_damage(damage : int) -> void:
+	print("Taking damage : ", damage)
 	if (health - damage) <= 0:
 		_set_health(0)
+		print(_get_health())
 		_die()
 	else:
 		_set_health( _get_health() - damage )
@@ -33,4 +34,5 @@ func heal(healing : int) -> void:
 	emit_signal("healed", _get_health())
 
 func _die() -> void:
+	print("died")
 	emit_signal("died")
