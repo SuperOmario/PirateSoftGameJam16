@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://iklqiwqyin7y"]
+[gd_scene load_steps=5 format=3 uid="uid://iklqiwqyin7y"]
 
 [ext_resource type="Script" path="res://code/main_menu.gd" id="1_0w44c"]
+[ext_resource type="Texture2D" uid="uid://csf1xkmegmjcu" path="res://assets/art/Cuddle.png" id="2_xdu8t"]
+[ext_resource type="Texture2D" uid="uid://cmdf1gso8m0ov" path="res://assets/art/Cuddle2.png" id="3_8d7gi"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_51syf"]
+frames = 2
+speed_scale = 2.0
+frame_0/texture = ExtResource("2_xdu8t")
+frame_1/texture = ExtResource("3_8d7gi")
+frame_1/duration = 1.0
 
 [node name="Menu" type="MarginContainer"]
 anchors_preset = 15
@@ -11,29 +20,47 @@ offset_top = 2.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
 script = ExtResource("1_0w44c")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+texture = SubResource("AnimatedTexture_51syf")
+expand_mode = 1
+stretch_mode = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
 [node name="Button" type="Button" parent="VBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
 text = "START"
 icon_alignment = 1
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 4
 bbcode_enabled = true
 text = "[center]Help your beloved Witch retrieve her Crystal Ball which has been stolen by the Evil Wizard's Familiar"
 fit_content = true

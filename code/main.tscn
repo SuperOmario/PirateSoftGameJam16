@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://csaj0xmcqdjxi"]
+[gd_scene load_steps=6 format=3 uid="uid://csaj0xmcqdjxi"]
 
 [ext_resource type="PackedScene" uid="uid://pn4k20bgommm" path="res://code/entities/familiar/familiar.tscn" id="1_uab3o"]
-[ext_resource type="PackedScene" uid="uid://cicxtn7ohak56" path="res://code/entities/enemy/enemy.tscn" id="2_0lbu5"]
+[ext_resource type="PackedScene" uid="uid://bg1onvqcj8ct7" path="res://code/entities/enemy/frog/frog.tscn" id="2_nh6mj"]
+[ext_resource type="PackedScene" uid="uid://bfi546x0gic5r" path="res://code/entities/enemy/wolf/wolf.tscn" id="3_sganr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g3rv3"]
 size = Vector3(60, 2, 60)
@@ -12,7 +13,8 @@ size = Vector3(60, 2, 60)
 [node name="Main" type="Node"]
 
 [node name="Ground" type="StaticBody3D" parent="."]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -4, 0)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 119, -4, 108)
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_g3rv3")
@@ -23,19 +25,30 @@ mesh = SubResource("BoxMesh_kbe3d")
 skeleton = NodePath("../..")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 12, 0)
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 119, 12, 108)
 shadow_enabled = true
 
-[node name="Camera" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 47, -6)
+[node name="Familiar" parent="." instance=ExtResource("1_uab3o")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 115, 14, 86)
 
-[node name="Camera3D" type="Camera3D" parent="Camera"]
-transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 3, 48, 2)
+[node name="Camera" type="Marker3D" parent="Familiar"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.8, 6.6, 6.6)
+
+[node name="Camera3D" type="Camera3D" parent="Familiar/Camera"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, -4, 106, 154)
+doppler_tracking = 1
 fov = 30.0
+size = 0.001
 near = 0.001
 
-[node name="Familiar" parent="." instance=ExtResource("1_uab3o")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 1, -23)
+[node name="Wolf" parent="." instance=ExtResource("3_sganr")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 87, 37, 172)
 
-[node name="Enemy" parent="." instance=ExtResource("2_0lbu5")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 16, 1, 0)
+[node name="Frog2" parent="." instance=ExtResource("2_nh6mj")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 179, 12, 139)
+
+[node name="Frog" parent="." instance=ExtResource("2_nh6mj")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 148, 8, 69)
+
+[editable path="Wolf"]
+[editable path="Wolf/Pivot/Attack"]

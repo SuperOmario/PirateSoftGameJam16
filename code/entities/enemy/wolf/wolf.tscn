@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://bfi546x0gic5r"]
+
+[ext_resource type="Script" path="res://code/entities/enemy/wolf/wolf.gd" id="1_pgjum"]
+[ext_resource type="PackedScene" uid="uid://ijw5edjyug2" path="res://code/misc/attack/attack.tscn" id="2_e7kct"]
+[ext_resource type="Texture2D" uid="uid://0nimgs8nn7fw" path="res://assets/art/Wolf.png" id="2_migsy"]
+[ext_resource type="PackedScene" uid="uid://ds41k140ci421" path="res://code/misc/health/health.tscn" id="3_rumdo"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_y04ey"]
+height = 5.1542
+radius = 1.70739
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xpb0q"]
+atlas = ExtResource("2_migsy")
+region = Rect2(0, 1600, 800, 800)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tvrmd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xpb0q")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qfaxp"]
+radius = 3.25298
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_isoyv"]
+radius = 4.70163
+
+[node name="Wolf" type="CharacterBody3D" groups=["Enemy"]]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_pgjum")
+speed = 600
+
+[node name="Pivot" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_y04ey")
+
+[node name="Sprite3D" type="AnimatedSprite3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.186615, 0, 0)
+billboard = 1
+sprite_frames = SubResource("SpriteFrames_tvrmd")
+
+[node name="Attack" parent="Pivot" instance=ExtResource("2_e7kct")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+attackdamage = 30
+attacktimertime = 0.4
+attackcooldowntime = 0.2
+
+[node name="HitBox" parent="Pivot/Attack" index="2"]
+collision_layer = 4
+collision_mask = 2
+
+[node name="HurtBox" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="HurtBoxCollision" type="CollisionShape3D" parent="HurtBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.219238, 0)
+shape = SubResource("CylinderShape3D_qfaxp")
+
+[node name="AggroRadius" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AggroRadius"]
+shape = SubResource("SphereShape3D_isoyv")
+
+[node name="Health" parent="." instance=ExtResource("3_rumdo")]
+health = 30
+max_health = 30
+
+[connection signal="damage" from="Pivot/Attack" to="." method="_on_attack_damage"]
+[connection signal="damaged" from="Health" to="." method="_on_health_damaged"]
+[connection signal="died" from="Health" to="." method="_on_died"]
+
+[editable path="Pivot/Attack"]
